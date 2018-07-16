@@ -12,6 +12,8 @@ router.get("/", (req, res, next) => {
   res.json({ message: "Welcome to my taxi app (backend)!" });
 });
 
+// TODO: copy and paste the code below to new files
+
 router.get("/users", async (req, res, next) => {
   const users = await User.find();
   res.json(users);

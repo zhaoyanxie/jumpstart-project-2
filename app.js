@@ -30,7 +30,7 @@ app.use(passport.initialize());
 indexRouter(app);
 signupRouter(app);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-console.log("-->", seedUserLocation(2));
+// console.log("-->", seedUserLocation(2));
 
 app.use(
   "/secret",

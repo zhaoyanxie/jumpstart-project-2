@@ -24,7 +24,7 @@ afterAll(() => {
   mongod.stop();
 });
 
-test("GET /", async () => {
+test("GET / should return status 200", async () => {
   const response = await request(app).get("/");
   expect(response.status).toBe(200);
 });
