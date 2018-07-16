@@ -1,7 +1,10 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const logger = require("morgan");
-const bodyParser = require("body-parser");
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 
 const { passport } = require("./config/passport");
 const indexRouter = require("./routes/index");
@@ -20,6 +23,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 indexRouter(app);
 
