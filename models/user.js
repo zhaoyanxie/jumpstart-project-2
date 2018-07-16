@@ -12,9 +12,12 @@ const UserSchema = new mongoose.Schema(
       match: [/^[a-zA-Z0-9]+$/, "is invalid"],
       index: true
     },
-    geoLocation: Object,
+    geoLocation: {
+      lat: String,
+      lng: String
+    },
     hash: String,
-    salt: String,
+    salt: String
   },
   { timestamps: true }
 );
