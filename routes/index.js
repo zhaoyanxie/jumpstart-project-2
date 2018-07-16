@@ -9,22 +9,7 @@ const router = express.Router();
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
-  res.json({ message: "hello express-blog-api" });
-});
-
-router.post("/signup", async (req, res, next) => {
-  const { username, password } = req.body;
-  const user = new User({
-    username,
-    bio: "some bio"
-  });
-  user.setPassword(password);
-  try {
-    await user.save();
-    res.json({ user });
-  } catch (err) {
-    next(err);
-  }
+  res.json({ message: "Welcome to my taxi app (backend)!" });
 });
 
 router.get("/users", async (req, res, next) => {
