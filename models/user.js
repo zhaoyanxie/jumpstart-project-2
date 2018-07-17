@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
       match: [/^[a-zA-Z0-9]+$/, "is invalid"],
       index: true
     },
+    isAdmin: Boolean,
     geoLocation: {
       lat: String,
       lng: String
