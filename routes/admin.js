@@ -3,7 +3,6 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { jwtOptions } = require("../config/passport");
 const { passport } = require("../config/passport");
-
 const router = express.Router();
 router.use(express.json());
 router.use(passport.initialize());
@@ -12,8 +11,14 @@ router.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
   async (req, res, next) => {
-    const users = await User.find();
-    res.json(users);
+    if (req.user.isAdmin) {
+      const users = await User.find();
+      res.json(users);
+    } else {
+      const error = new Error("User is not an admin");
+      error.status = 401;
+      next(error);
+    }
   }
 );
 
@@ -21,13 +26,12 @@ router.delete(
   "/:idToDelete",
   passport.authenticate("jwt", { session: false }),
   async (req, res, next) => {
-    if (req.user.isAdmin) {
+    if (req.user.isAdmin === true) {
       try {
-        const users = await User.findByIdAndRemove(req.params.idToDelete);
-        console.log("**********", users);
-        res.json({ message: "sdkjfhasdfl" });
+        await User.findByIdAndRemove(req.params.idToDelete);
+        res.json({ message: `user ${req.params.idToDelete} has been deleted` });
       } catch (error) {
-        res.json({ message: "User not found" });
+        next(error);
       }
     } else {
       const error = new Error("User is not an admin");

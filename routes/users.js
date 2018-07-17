@@ -28,7 +28,8 @@ router.post("/login", async (req, res, next) => {
 router.post("/signup", async (req, res, next) => {
   const { username, password, isAdmin } = req.body;
   const user = new User({
-    username, isAdmin
+    username,
+    isAdmin
   });
   user.setPassword(password);
   try {

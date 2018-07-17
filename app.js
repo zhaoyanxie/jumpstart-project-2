@@ -14,12 +14,6 @@ const seedUserLocation = require("./utils/seedUserLocation");
 
 const app = express();
 
-const mongodb_uri = process.env.MONGODB_URI || "mongodb://localhost/jumpstart";
-mongoose.connect(mongodb_uri);
-const db = mongoose.connection;
-db.on("error", error => {
-  console.error("An error occurred!", error);
-});
 
 app.use(logger("dev"));
 app.use(express.json());
