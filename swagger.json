@@ -22,13 +22,11 @@
                 "schema": {
                   "type": "array",
                   "example": {
-                    
-                      "username": "user01",
-                      "location": {
+                    "username": "user01",
+                    "location": {
                       "lng": "103.7487",
                       "lat": "1.3694"
-                      
-                      }
+                    }
                   }
                 }
               }
@@ -75,7 +73,8 @@
             "name": "body",
             "in": "body",
             "required": true,
-            "description": "The username and the password of the user. Usernames must be unique and cannot be blank",
+            "description":
+              "The username and the password of the user. Usernames must be unique and cannot be blank",
             "schema": {
               "example": {
                 "username": "user01",
@@ -90,14 +89,16 @@
             "description": "Null response"
           },
           "500": {
-            "description": "'User validation failed: username: should be unique' or 'User validation failed: username: cannot be blank'"
+            "description":
+              "'User validation failed: username: should be unique' or 'User validation failed: username: cannot be blank'"
           }
         }
       }
     },
     "/:username": {
       "put": {
-        "summary": "Change a user's username and/or password by an admin or the user",
+        "summary":
+          "Change a user's username and/or password by an admin or the user",
         "tags": ["users"],
         "parameters": [
           {
@@ -122,116 +123,46 @@
             "description": "Unauthorized"
           },
           "500": {
-            "description": "user01 is not found."
+            "description": "<user> is not found."
           }
         }
       }
     },
-    "/resource11": {
-      "get": {
-        "summary": "List all resource1",
-        "tags": ["resource1"],
-        "responses": {
-          "200": {
-            "description": "An array of blog posts",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "example": {
-                      "id": 5,
-                      "name": "hello",
-                      "flavour": "margarita"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+    "/assign": {
       "post": {
-        "summary": "Create a resource",
-        "tags": ["resource1"],
-        "responses": {
-          "201": {
-            "description": "Null response"
-          },
-          "400": {
-            "description": "Bad request"
-          }
-        }
-      }
-    },
-    "/resource1/{id}": {
-      "get": {
-        "summary": "Info for a specific resource",
-        "tags": ["resource1"],
+        "summary": "Add a new user with administrative rights",
+        "tags": ["admin"],
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "description": "The id of the resource to retrieve",
+            "description":
+              "Input the username and the password of the admin user to be added.",
             "schema": {
-              "type": "number"
+              "example": {
+                "username": "admin01",
+                "passsword": "password01"
+              },
+              "type": "JSON"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Expected response to a valid request",
+            "description": "New admin user",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "id": 5,
-                    "name": "something"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Update a specific item",
-        "tags": ["resource1"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the resource to update",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Updated fields for resource",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "example": {
-                  "id": 2,
-                  "name": "something"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Expected response to a valid request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "example": {
-                    "id": 5,
-                    "name": "updated name"
+                  "type": "object",
+                  "items": {
+                    "example": {
+                      "user": {
+                        "_id": "5b4effb71b449f32a0a4d6d1",
+                        "username": "admin02",
+                        "isAdmin": true
+                      }
+                    }
                   }
                 }
               }
@@ -240,23 +171,78 @@
         }
       }
     },
-    "/resource2": {
+    "/users": {
       "get": {
-        "summary": "List all resource1",
-        "tags": ["resource2"],
+        "summary": "Get the list of all user data",
+        "tags": ["admin"],
         "responses": {
           "200": {
-            "description": "List of resource objects",
+            "description": "An array of user data",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "example": {
-                      "id": 6,
-                      "special": "a different kind of resource"
-                    }
+                    "example": [
+                      {
+                        "geoLocation": {
+                          "lng": "103.7475",
+                          "lat": "1.39697"
+                        },
+                        "_id": "5b4ea7f5f1fb2e096b2fae23",
+                        "username": "user01",
+                        "salt": "696266219d4365a21e6f30c330028559",
+                        "hash":
+                          "a566d20a1c7756db882775916d2bd42d7a5cc9578154c9c59c6621cf7a7d3f335745adb35b9f31e602510b69b109176a39f41708fc335fe6216278c1a7ab73dfb80b045ddce4bbd41a2737a413b672a77590366232797270558da7683b945396621974a4d31ecf40961272746593d53f6d2a294e9cc27c80c088e21260e0d3a28dfa6689611f179fa8ada607f4859bacbaa07d6e31ce4e8bb493225ca54a9ba1f5c65e70a6cc4364a4953e1518860b0c005fd73317344dc4f73a26bef61aaf7f720b2bc569d468ecacb5afcffb6eb9274328442c2adf88dc4e06399bf075c0bd6c0fea7e9c47ffa2777dacb8c2d843522a9fdfb92a81d65e214f8dbe028054ff7a2f9bc87fe01c4cef84aab998324e7219129dd9eb02871b85ee6e5724de1ed758f65bb6529528331d031cee4fa7a086ee6e6575978202295cfd7fa2aee21490d5f81b3362a36f61b992b1eb546c1a4090d7ffc9d941f59ded6ec1ce0fb99a7e933cd34fb88d17ea0d5ed437dfd9cf003a9ecb5ea212fe0bbbb394f05e076a9bdafc3ccaba06b9592dadc055095b8c6cbd0f0ade80c28be277666623a957f383c4c0b4bb89e85cf1347d6ea2dd570e76cebef0e48f8b17ac24df6671f183a3ad95b2695fb889f3f1fac70b6e5a77739414c93810393a5f0c6ee7d3a720098d3d5e2fa32778e9ac30f1b9f8eb034a0caeb6ae7da05d4f55a8a7e91fde5b17e321",
+                        "createdAt": "2018-07-18T02:37:41.188Z",
+                        "updatedAt": "2018-07-18T08:16:20.917Z",
+                        "__v": 0,
+                        "isAvailable": true
+                      },
+                      {
+                        "_id": "5b4ea7fbf1fb2e096b2fae24",
+                        "username": "user02",
+                        "salt": "8a336af722aa9068e7d40e0655f2967a",
+                        "hash":
+                          "8856206b1ec37f310170edd34b93fe58f637cbf779f6211ba0df4d764d44469dd79433b178e9eeec7f29256a4045d7603a66203cee92f42efd79de30025c1d59a5050098ae9612a82d6f0256acd4574c7780e57c8169a3c5a4ed4739eae51db3c53d1c21df631219d339eff7c091b3cb727955c949142b84018f5109963aa62390b8fe00879cb33328e6c1d89050cbf9a27838f9b1e7773954f04437375c8d226e43e03888024684f87f5bea901d906b4f68034f0a2907fc2990ab83645dd37095e82bfff1b945a8537dc8feb7c3535cd7a889cf7df04d03bfe19bc4f6d8d37a7389184bdaa0b9c215428fff200313367bd2955c2fdda2333bfd61c0d8ca480c5418f23939e2ddbf1892e67f767a218bad423c99c02f18101d0813a8c945837d5cecbca2978eb111caf0f55b0cdc7caa5abcae3f14e95e53d288f3db1f37721a9055b2ce392a18087124017cf9f4ebdf0af5b8861d7786338741432cadd5dc795e65774942e058560207bdc167ba44668d2f8c7d49166d6ffcb59584c26f8b51dec81852599efadec1482eeb035c2c17b37a5d9f99f4cbc3656cea532d5a35cdeafe839477af95a3114f41113f3011c84b3a545a39345ea3e95c885847f82af9235f01a29640ded47a43baa9332d990503484685f608c05fa0b5f0239e6154509a5cbf98c80e53ceae91e6231c1d89aad51e2833026e800668a1fc47ad0d662f",
+                        "createdAt": "2018-07-18T02:37:47.524Z",
+                        "updatedAt": "2018-07-18T06:38:41.607Z",
+                        "__v": 0
+                      }
+                    ]
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{userIdToDelete}": {
+      "delete": {
+        "summary": "Delete a user",
+        "tags": ["admin"],
+        "parameters": [
+          {
+            "name": "userIdToDelete",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to be deleted.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": 
+                    {
+                      "message":"user {userIdToDelete} has been deleted"
+                    }
                 }
               }
             }
