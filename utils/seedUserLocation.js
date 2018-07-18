@@ -1,5 +1,5 @@
 seedUserLocation = noOfUsersToSeed => {
-  const seedUsers = [];
+  // const seedUsers = [];
   const rawData = [
     { lng: 103.61683, lat: 1.27291 },
     { lng: 103.62098, lat: 1.27436 },
@@ -463,10 +463,12 @@ seedUserLocation = noOfUsersToSeed => {
     { lng: 103.75032, lat: 1.40769 }
   ];
 
-  for (let i = 0; i < noOfUsersToSeed; i++) {
-    seedUsers.push(rawData[randomNumber(rawData.length)]);
-  }
-  return seedUsers;
+  // for (let i = 0; i < noOfUsersToSeed; i++) {
+  //   seedUsers.push(rawData[randomNumber(rawData.length)]);
+  // }
+
+  // return seedUsers;
+  return rawData[randomNumber(rawData.length)];
 };
 
 randomNumber = maxLimit => {

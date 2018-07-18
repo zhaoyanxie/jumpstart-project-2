@@ -32,10 +32,6 @@ afterAll(() => {
   mongod.stop();
 });
 
-test("should ", () => {
-  expect(1).toBe(1);
-});
-
 test("POST /users/signup - post a unique new user should return response status 200", async () => {
   const response = await request(app)
     .post("/users/signup")

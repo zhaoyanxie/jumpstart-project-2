@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema(
       index: true
     },
     isAdmin: Boolean,
+    isAvailable: Boolean,
     geoLocation: {
       lat: String,
       lng: String

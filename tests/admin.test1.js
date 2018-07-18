@@ -10,23 +10,31 @@ const mongod = new MongoMemoryServer();
 const mongoose = require("mongoose");
 
 const app = require("../app");
-// const router = express();
+// const app = express();
 // adminRouter(router);
 
 // before all test blocks
-async function signUp(username, password, isAdmin) {
+async function signUpUser(username, password) {
   await request(app)
     .post("/users/signup")
     .send({
       username,
-      password,
-      isAdmin
+      password
     });
 }
 
-async function loginUser(username, password) {
+async function assignAdmin(username, password) {
+  await request(app)
+    .post("/admin/assign")
+    .send({
+      username,
+      password
+    });
+}
+
+async function login(username, password) {
   let response = await request(app)
-    .post("/users/login")
+    .post("/login")
     .send({
       username,
       password
@@ -47,8 +55,8 @@ afterAll(() => {
 });
 
 test("GET /users should return status 200 for admin", async () => {
-  await signUp("admin01", "password01", true);
-  const jwtToken = await loginUser("admin01", "password01");
+  await assignAdmin("admin01", "password01");
+  const jwtToken = await login("admin01", "password01");
   const response = await request(app)
     .get("/admin/users")
     .set("Authorization", "Bearer " + jwtToken);
@@ -56,8 +64,8 @@ test("GET /users should return status 200 for admin", async () => {
 });
 
 test("GET /users should return status 401 for non admin", async () => {
-  await signUp("user01", "password01", false);
-  const jwtToken = await loginUser("user01", "password01");
+  await signUpUser("user01", "password01");
+  const jwtToken = await login("user01", "password01");
   const response = await request(app)
     .get("/admin/users")
     .set("Authorization", "Bearer " + jwtToken);
@@ -66,9 +74,9 @@ test("GET /users should return status 401 for non admin", async () => {
 });
 
 test("DELETE /users should return status 200 for admin", async () => {
-  await signUp("admin01", "password01", true);
-  await signUp("user01", "password01", false);
-  const jwtToken = await loginUser("admin01", "password01");
+  await assignAdmin("admin01", "password01");
+  await signUpUser("user01", "password01", false);
+  const jwtToken = await login("admin01", "password01");
   const userToDelete = await User.findOne({ username: "user01" });
   const idToDelete = userToDelete._id;
 
@@ -80,9 +88,9 @@ test("DELETE /users should return status 200 for admin", async () => {
 });
 
 test("DELETE /users should return status 401 for non admin", async () => {
-  await signUp("user01", "password01", false);
-  await signUp("user02", "password02", false);
-  const jwtToken = await loginUser("user02", "password02");
+  await signUpUser("user01", "password01", false);
+  await signUpUser("user02", "password02", false);
+  const jwtToken = await login("user02", "password02");
   const response = await request(app)
     .get("/admin/users")
     .set("Authorization", "Bearer " + jwtToken);

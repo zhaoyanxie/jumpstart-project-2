@@ -1,11 +1,24 @@
 const express = require("express");
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const { jwtOptions } = require("../config/passport");
 const { passport } = require("../config/passport");
 const router = express.Router();
 router.use(express.json());
 router.use(passport.initialize());
+
+router.post("/assign", async (req, res, next) => {
+  const { username, password } = req.body;
+  const user = new User({
+    username,
+    isAdmin: true
+  });
+  user.setPassword(password);
+  try {
+    await user.save();
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.get(
   "/users",
