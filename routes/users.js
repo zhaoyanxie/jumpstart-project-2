@@ -1,9 +1,8 @@
 const express = require("express");
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const { jwtOptions } = require("../config/passport");
+// const jwt = require("jsonwebtoken");
+// const { jwtOptions } = require("../config/passport");
 const { passport } = require("../config/passport");
-const seedUserLocation = require("../utils/seedUserLocation");
 
 const router = express.Router();
 router.use(express.json());
@@ -23,6 +22,7 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
+// TODO: to amend this to PUT to amend user data
 router.get(
   "/:username",
   passport.authenticate("jwt", { session: false }),
