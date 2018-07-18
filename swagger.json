@@ -75,7 +75,7 @@
             "name": "body",
             "in": "body",
             "required": true,
-            "description": "The username and the password of the user. Usernames must be unique and cannot be blank.",
+            "description": "The username and the password of the user. Usernames must be unique and cannot be blank",
             "schema": {
               "example": {
                 "username": "user01",
@@ -91,6 +91,38 @@
           },
           "500": {
             "description": "'User validation failed: username: should be unique' or 'User validation failed: username: cannot be blank'"
+          }
+        }
+      }
+    },
+    "/:username": {
+      "put": {
+        "summary": "Change a user's username and/or password by an admin or the user",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Change username and the password of the user.",
+            "schema": {
+              "example": {
+                "username": "newUser01",
+                "passsword": "new_password01"
+              },
+              "type": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Null response"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "user01 is not found."
           }
         }
       }

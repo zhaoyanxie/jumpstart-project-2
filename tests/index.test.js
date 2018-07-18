@@ -53,7 +53,6 @@ test("POST /login should return status 200 for valid login", async () => {
       password: user01.password
     });
   expect(response.status).toBe(200);
-  expect(response.message).toBe("Logged in successfully");
 });
 
 test("POST /login should return status 401 for invalid login", async () => {

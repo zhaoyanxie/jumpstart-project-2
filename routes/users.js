@@ -1,7 +1,5 @@
 const express = require("express");
 const User = require("../models/user");
-// const jwt = require("jsonwebtoken");
-// const { jwtOptions } = require("../config/passport");
 const { passport } = require("../config/passport");
 
 const router = express.Router();
@@ -27,40 +25,40 @@ router.put(
   "/:username",
   passport.authenticate("jwt", { session: false }),
   async (req, res, next) => {
-    try {
-      const userLoggedIn = req.user;
-      if (
-        userLoggedIn.username === req.params.username ||
-        userLoggedIn.isAdmin
-      ) {
-        const user = await User.findOne({ username: req.params.username });
-        if (user) {
-          const { username, password } = req.body;
-          // update user usernames
-          if (username) user.username = username;
-          if (password) user.setPassword(password);
-          await user.save();
-
-          res.status(401).json(user);
-        } else {
-          const error = new Error(`User ${req.params.username} is not found`);
-          next(error);
+    const userLoggedIn = req.user;
+    if (userLoggedIn.username === req.params.username || userLoggedIn.isAdmin) {
+      const user = await User.findOne({ username: req.params.username });
+      if (user) {
+        const { username, password } = req.body;
+        let display = { message: "" };
+        // update user usernames
+        if (username) {
+          display.message += `Username changed successfully from ${
+            user.username
+          } `;
+          user.username = username;
+          display.message += `to ${user.username}.
+          `;
         }
+        if (password) {
+          user.setPassword(password);
+          display.message += `Password changed successfully to ${password}.`;
+        }
+        await user.save();
+
+        res.json(display);
       } else {
-        res.json({
-          message:
-            "You do not have the permission to view the details of other users"
-        });
+        const error = new Error(`${req.params.username} is not found`);
+        next(error);
       }
-    } catch (error) {
-      next(error);
+    } else {
+      res.status(401).json({
+        message:
+          "You do not have the permission to view the details of other users"
+      });
     }
   }
 );
-
-// router.get("/location", async (req, res, next) => {
-//   res.json(seedUserLocation());
-// });
 
 module.exports = app => {
   app.use("/users", router);
