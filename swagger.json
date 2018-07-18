@@ -12,17 +12,23 @@
   "paths": {
     "/": {
       "get": {
-        "summary": "Welcome page",
+        "summary": "Homepage shows the location of the users waiting for taxis",
         "tags": ["root"],
         "responses": {
           "200": {
-            "description": "Displays welcome message",
+            "description": "Displays users' location",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
+                  "type": "array",
                   "example": {
-                    "message": "Welcome to my taxi app (backend)!"
+                    
+                      "username": "user01",
+                      "location": {
+                      "lng": "103.7487",
+                      "lat": "1.3694"
+                      
+                      }
                   }
                 }
               }
@@ -31,16 +37,16 @@
         }
       }
     },
-    "/signup": {
+    "/login": {
       "post": {
-        "summary": "Add a user",
-        "tags": ["signup"],
+        "summary": "Log in page for user or admin",
+        "tags": ["root"],
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "required": true,
-            "description": "The username and the password of the user",
+            "description": "The username and the password of the user/admin",
             "schema": {
               "example": {
                 "username": "user01",
@@ -54,8 +60,37 @@
           "201": {
             "description": "Null response"
           },
-          "400": {
-            "description": "Bad request"
+          "401": {
+            "description": "Password does not match"
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "summary": "Add a user",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "The username and the password of the user. Usernames must be unique and cannot be blank.",
+            "schema": {
+              "example": {
+                "username": "user01",
+                "passsword": "password01"
+              },
+              "type": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Null response"
+          },
+          "500": {
+            "description": "'User validation failed: username: should be unique' or 'User validation failed: username: cannot be blank'"
           }
         }
       }

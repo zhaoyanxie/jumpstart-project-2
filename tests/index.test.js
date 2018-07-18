@@ -64,7 +64,7 @@ test("POST /login should return status 401 for invalid login", async () => {
       password: user02.password
     });
   expect(response.status).toBe(401);
-  expect(response.body.message).toBe("password does not match");
+  expect(response.body.message).toBe("Password does not match");
 });
 
 test("POST /login should return status 401 for  user not found", async () => {
@@ -75,5 +75,5 @@ test("POST /login should return status 401 for  user not found", async () => {
       password: userNotFound.password
     });
   expect(response.status).toBe(401);
-  expect(response.body.message).toBe("no such user found");
+  expect(response.body.message).toBe("No such user found");
 });
