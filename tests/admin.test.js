@@ -1,17 +1,11 @@
 const request = require("supertest");
 const User = require("../models/user");
 
-// const express = require("express");
-
-// const adminRouter = require("../routes/admin");
-
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongod = new MongoMemoryServer();
 const mongoose = require("mongoose");
 
 const app = require("../app");
-// const app = express();
-// adminRouter(router);
 
 // before all test blocks
 async function signUpUser(username, password) {
@@ -23,13 +17,14 @@ async function signUpUser(username, password) {
     });
 }
 
-async function assignAdmin(username, password) {
+async function assignAdmin(username, password, jwtTokenSuperuser) {
   await request(app)
     .post("/admin/assign")
     .send({
       username,
       password
-    });
+    })
+    .set("Authorization", "Bearer " + jwtTokenSuperuser);
 }
 
 async function login(username, password) {
@@ -41,12 +36,19 @@ async function login(username, password) {
     });
   return response.body.token;
 }
+const superuser = new User({
+  username: "superuser",
+  isAdmin: true
+});
 
 beforeAll(async () => {
   jest.setTimeout(120000);
 
   const uri = await mongod.getConnectionString();
   await mongoose.connect(uri);
+
+  superuser.setPassword("password");
+  await superuser.save();
 });
 
 afterAll(() => {
@@ -55,7 +57,9 @@ afterAll(() => {
 });
 
 test("GET /users should return status 200 for admin", async () => {
-  await assignAdmin("admin01", "password01");
+  const jwtTokenSuperuser = await login(superuser.username, "password");
+
+  await assignAdmin("admin01", "password01", jwtTokenSuperuser);
   const jwtToken = await login("admin01", "password01");
   const response = await request(app)
     .get("/admin/users")
