@@ -9,6 +9,7 @@ const { passport } = require("./config/passport");
 const adminRouter = require("./routes/admin");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const seedUsers = require("./utils/seedUsers");
 
 const app = express();
 
