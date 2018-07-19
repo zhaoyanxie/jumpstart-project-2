@@ -4,13 +4,16 @@ const logger = require("morgan");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 
-const { passport } = require("./config/passport");
 const { handle404, handle500 } = require("./middlewares/error_handlers");
+const { passport } = require("./config/passport");
 const adminRouter = require("./routes/admin");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
 const app = express();
+
+const seedSuperUser = require("./utils/seedSuperuser");
+seedSuperUser();
 
 app.use(logger("dev"));
 app.use(express.json());
