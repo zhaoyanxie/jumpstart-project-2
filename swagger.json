@@ -102,22 +102,26 @@
         "tags": ["users"],
         "parameters": [
           {
-            "name": "body",
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
             "in": "body",
-            "required": true,
             "description": "Change username and the password of the user.",
             "schema": {
               "example": {
                 "username": "newUser01",
                 "passsword": "new_password01"
               },
-              "type": "JSON"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Null response"
+            "description": "Will send user's details"
           },
           "401": {
             "description": "Unauthorized"
@@ -130,8 +134,7 @@
     },
     "/{username}/logout": {
       "put": {
-        "summary":
-          "Change the availability of the user to unavailable",
+        "summary": "Change the availability of the user to unavailable",
         "tags": ["users"],
         "parameters": [
           {
@@ -252,6 +255,20 @@
       "delete": {
         "summary": "Delete a user",
         "tags": ["admin"],
+        "components": {
+          "securitySchemes": {
+            "bearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "userIdToDelete",
@@ -269,10 +286,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": 
-                    {
-                      "message":"user {userIdToDelete} has been deleted"
-                    }
+                  "example": {
+                    "message": "user {userIdToDelete} has been deleted"
+                  }
                 }
               }
             }
