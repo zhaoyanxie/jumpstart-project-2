@@ -94,7 +94,7 @@ seeder.connect(
     seeder.loadModels(["models/user.js"]);
     seeder.clearModels(["User"], () => {
       seeder.populateModels(data, () => {
-        // seeder.disconnect();
+        seeder.disconnect();
       });
     });
   }
