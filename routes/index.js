@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.use(express.json());
 
-/* GET home page which populates the users with their locations */
 router.get("/", async (req, res, next) => {
   try {
     const users = await User.find();

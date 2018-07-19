@@ -59,6 +59,32 @@ router.put(
   }
 );
 
+router.put(
+  "/:username/logout",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    const userLoggedIn = req.user;
+    if (userLoggedIn.username === req.params.username || userLoggedIn.isAdmin) {
+      const user = await User.findOne({ username: req.params.username });
+      if (user) {
+        console.log("====>", req.user.isAvailable);
+        userLoggedIn.isAvailable = false;
+        await userLoggedIn.save();
+        let display = { message: "user logged out successfully" };
+        res.json(display);
+      } else {
+        const error = new Error(`${req.params.username} is not found`);
+        next(error);
+      }
+    } else {
+      res.status(401).json({
+        message:
+          "You do not have the permission to view the details of other users"
+      });
+    }
+  }
+);
+
 router.get("/:username/location", async (req, res, next) => {
   const user = await User.find({ username: req.params.username });
   const usernameAndLocation = {
