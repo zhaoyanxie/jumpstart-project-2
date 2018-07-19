@@ -20,7 +20,6 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-// TODO: test this route
 router.put(
   "/:username",
   passport.authenticate("jwt", { session: false }),
@@ -59,6 +58,14 @@ router.put(
     }
   }
 );
+
+router.get("/:username/location", async (req, res, next) => {
+  const user = await User.find({ username: req.params.username });
+  const usernameAndLocation = {
+    location: user[0].geoLocation
+  };
+  res.json(usernameAndLocation);
+});
 
 module.exports = app => {
   app.use("/users", router);

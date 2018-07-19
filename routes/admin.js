@@ -5,20 +5,30 @@ const router = express.Router();
 router.use(express.json());
 router.use(passport.initialize());
 
-router.post("/assign", async (req, res, next) => {
-  const { username, password } = req.body;
-  const user = new User({
-    username,
-    isAdmin: true
-  });
-  user.setPassword(password);
-  try {
-    await user.save();
-    res.json({ user });
-  } catch (err) {
-    next(err);
+router.post(
+  "/assign",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    if (req.user.isAdmin) {
+      const { username, password } = req.body;
+      const user = new User({
+        username,
+        isAdmin: true
+      });
+      user.setPassword(password);
+      try {
+        await user.save();
+        res.json({ user });
+      } catch (err) {
+        next(err);
+      }
+    } else {
+      const error = new Error("User is not an admin");
+      error.status = 401;
+      next(error);
+    }
   }
-});
+);
 
 router.get(
   "/users",

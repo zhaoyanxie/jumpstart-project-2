@@ -12,9 +12,6 @@ const usersRouter = require("./routes/users");
 
 const app = express();
 
-const seedSuperUser = require("./utils/seedSuperuser");
-seedSuperUser();
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(passport.initialize());

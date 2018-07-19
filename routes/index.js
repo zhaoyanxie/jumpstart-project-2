@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
       if (!user.isAdmin && user.isAvailable) {
         const usernameAndLocation = {
           username: user.username,
-          location: user.geoLocation
+          location: seedUserLocation()
         };
         displayUsernameAndLocation.push(usernameAndLocation);
       }
