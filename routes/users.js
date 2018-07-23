@@ -67,7 +67,6 @@ router.put(
     if (userLoggedIn.username === req.params.username || userLoggedIn.isAdmin) {
       const user = await User.findOne({ username: req.params.username });
       if (user) {
-        console.log("====>", req.user.isAvailable);
         userLoggedIn.isAvailable = false;
         await userLoggedIn.save();
         let display = { message: "user logged out successfully" };
